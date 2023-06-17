@@ -39,7 +39,9 @@ class Directions extends Component {
             if (response.status === 'OK') {
                 this.setState(
                     () => ({
-                        response
+                        response,
+                        distance: response.routes[0].legs[0].distance.text,
+                        duration: response.routes[0].legs[0].duration.text
                     })
                 )
             } else {
@@ -204,30 +206,62 @@ class Directions extends Component {
         };
         return (
             <div className='map'>
-                <div className="map-settings p-4 bg-gray-100">
+                <h3 className='w-100 h-10 text-center items-center bg-red-500 rounded-t-lg text-white block bold'>Parul Navigation</h3>
+                <div className="map-settings p-4 bg-blue-500 rounded-b-sm text-white ">
                     <div className="mb-4">
-                        <label htmlFor="ORIGIN" className="block font-medium text-gray-700">Origin</label>
-                        <input
-                            id="ORIGIN"
-                            className="form-input mt-1 block w-full"
-                            type="text"
-                            value={this.state.origin}
-                            onChange={this.handleOriginChange}
-                        />
+
+                    </div>
+                    <div className='grid grid-cols-2 rounded border ... mb-4'>
+                        <div className=''>
+                            <div className='text-gray-500 w-100'>
+                                <div className=" flex p-2 ">
+                                    <input
+                                        id="ORIGIN"
+                                        className="form-input mt-1 block w-full rounded-sm"
+                                        type="text"
+                                        value={this.state.origin}
+                                        onChange={this.handleOriginChange}
+                                        placeholder='Origin...'
+                                    />
+                                    <div className="rounded text-white pl-1">
+                                    <div onClick={this.handleCurrentLocation}>
+                                        <button>
+                                            <i className="fas fa-compass"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div className="mb-4 flex p-2">
+                                    <input
+                                        id="DESTINATION"
+                                        className="form-input mt-1 block w-full rounded-sm"
+                                        type="text"
+                                        value={this.state.destination}
+                                        onChange={this.handleDestinationChange}
+                                        placeholder='Destination...'
+                                    />&nbsp;
+                                    <div className="rounded text-white">
+                                    <div onClick={this.handleCurrentLocation}>
+                                        <button>
+                                        <i class="fas fa-exchange-alt fa-rotate-90"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div>
+                                
+                            </div>
+                        </div>
+                        <div className="rounded m-2" onClick={this.onClick}>
+                            <button class="bg-red-400 hover:bg-white hover:text-red-400 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Build Route
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="DESTINATION" className="block font-medium text-gray-700">Destination</label>
-                        <input
-                            id="DESTINATION"
-                            className="form-input mt-1 block w-full"
-                            type="text"
-                            value={this.state.destination}
-                            onChange={this.handleDestinationChange}
-                        />
-                    </div>
-
-                    <div className="flex flex-wrap mb-4">
+                    <div className="flex flex-wrap rounded mb-4 border ...">
                         <div className="mr-4">
                             <input
                                 id="DRIVING"
@@ -237,7 +271,9 @@ class Directions extends Component {
                                 checked={this.state.travelMode === 'DRIVING'}
                                 onChange={this.checkDriving}
                             />
-                            <label className="ml-2 text-gray-700" htmlFor="DRIVING">Driving</label>
+                            <label className="ml-2 text-white" htmlFor="DRIVING">
+                            <i class="text-white fa-solid fa-car"></i> Driving
+                            </label>
                         </div>
 
                         <div className="mr-4">
@@ -249,7 +285,9 @@ class Directions extends Component {
                                 checked={this.state.travelMode === 'BICYCLING'}
                                 onChange={this.checkBicycling}
                             />
-                            <label className="ml-2 text-gray-700" htmlFor="BICYCLING">Bicycling</label>
+                            <label className="ml-2 text-white" htmlFor="BICYCLING">
+                            <i class="fa-solid fa-bicycle"></i> Bicycling
+                            </label>
                         </div>
 
                         <div className="mr-4">
@@ -261,7 +299,9 @@ class Directions extends Component {
                                 checked={this.state.travelMode === 'TRANSIT'}
                                 onChange={this.checkTransit}
                             />
-                            <label className="ml-2 text-gray-700" htmlFor="TRANSIT">Transit</label>
+                            <label className="ml-2 text-white" htmlFor="TRANSIT">
+                            <i class="fa-solid fa-bus"></i> Transit
+                            </label>
                         </div>
 
                         <div className="mr-4">
@@ -273,17 +313,19 @@ class Directions extends Component {
                                 checked={this.state.travelMode === 'WALKING'}
                                 onChange={this.checkWalking}
                             />
-                            <label className="ml-2 text-gray-700" htmlFor="WALKING">Walking</label>
+                            <label className="ml-2 text-white" htmlFor="WALKING">
+                                <i class="fa-solid fa-person-walking"></i> Walking
+                            </label>
                         </div>
                     </div>
-
-                    <button className="btn btn-primary" type="button" onClick={this.onClick}>
-                        Build Route
-                    </button>
+                    <div className='flex justify-center justify-between m-y-15'>
+                        <p>Distance: {this.state.distance}</p>
+                        <p>Duration: {this.state.duration}</p>
+                    </div>
                 </div>
 
 
-                <div className='map-container'>
+                <div className='map-container z-10'>
                     <GoogleMap
                         onClick={this.onMapClick}
                         // required
@@ -319,7 +361,7 @@ class Directions extends Component {
                             >
                                 <div>
                                     <button onClick={this.addLocationToOrigin}>Add to Origin</button>
-                                    <br/>
+                                    <br />
                                     <button onClick={this.addLocationToDestination}>Add to Destination</button>
                                 </div>
                             </InfoWindow>
@@ -362,12 +404,6 @@ class Directions extends Component {
                                     }}
                                 />
                             ))}
-                        <div className="pr-10 current-location-control" onClick={this.handleCurrentLocation}>
-                            <div className="current-location-button">
-                                <i className="fas fa-compass"></i>
-                            </div>
-                        </div>
-
                     </GoogleMap>
                 </div>
             </div>
