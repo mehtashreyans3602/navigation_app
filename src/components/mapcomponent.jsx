@@ -17,7 +17,7 @@ class Directions extends Component {
             destination: '',
             showInfoWindow: false,
         }
-
+        this.startJourney = this.startJourney.bind(this);
         this.directionsCallback = this.directionsCallback.bind(this);
         this.checkDriving = this.checkDriving.bind(this);
         this.checkBicycling = this.checkBicycling.bind(this);
@@ -169,6 +169,10 @@ class Directions extends Component {
     onInfoWindowClose = () => {
         this.setState({ infoWindowPosition: null });
     };
+
+    startJourney() {
+        this.setState({ journeyStarted: true });
+      }
     render() {
         const mapoptions = {
             streetViewControl: false, // Disable street view control
@@ -287,6 +291,7 @@ class Directions extends Component {
                         <p>Distance: <br/>{this.state.distance}</p>
                         <p>Duration: <br/>{this.state.duration}</p>
                     </div>
+                    <button onClick={this.startJourney}>Start Journey</button>
                 </div>
 
 
@@ -297,7 +302,7 @@ class Directions extends Component {
                         id='direction-example'
                         // required
                         mapContainerStyle={{
-                            height: '400px',
+                            height: '70vh',
                             width: '100%'
                         }}
                         // required
@@ -365,12 +370,19 @@ class Directions extends Component {
                                     options={{
                                         directions: this.state.response,
                                         routeIndex: index,
+                                        panel: document.getElementById('journey-info')
                                         // You can customize other options as needed
                                     }}
                                 />
                             ))}
                             <BicyclingLayer/>
                     </GoogleMap>
+                    {this.state.journeyStarted && (
+  <div className="journey-info" id="journey-info">
+    <p>Your journey has started!</p>
+  </div>
+)}
+
                 </div>
             </div>
         )
