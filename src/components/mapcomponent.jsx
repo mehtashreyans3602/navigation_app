@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import {GoogleMap, LoadScript, DirectionsService, DirectionsRenderer, Marker, InfoWindow, BicyclingLayer } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, DirectionsService, DirectionsRenderer, Marker, InfoWindow, BicyclingLayer } from '@react-google-maps/api';
 import './mapcomponent.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -19,10 +19,6 @@ class Directions extends Component {
         }
         this.startJourney = this.startJourney.bind(this);
         this.directionsCallback = this.directionsCallback.bind(this);
-        this.checkDriving = this.checkDriving.bind(this);
-        this.checkBicycling = this.checkBicycling.bind(this);
-        this.checkTransit = this.checkTransit.bind(this);
-        this.checkWalking = this.checkWalking.bind(this);
         this.handleOriginChange = this.handleOriginChange.bind(this);
         this.handleDestinationChange = this.handleDestinationChange.bind(this);
         this.onMapClick = this.onMapClick.bind(this);
@@ -49,41 +45,13 @@ class Directions extends Component {
         }
     }
 
-    checkDriving({ target: { checked } }) {
-        checked &&
-            this.setState(
-                () => ({
-                    travelMode: 'DRIVING'
-                })
-            )
+    handleTravelModeChange = (travelMode) => {
+        this.setState({
+            travelMode
+        });
     }
 
-    checkBicycling({ target: { checked } }) {
-        checked &&
-            this.setState(
-                () => ({
-                    travelMode: 'BICYCLING'
-                })
-            )
-    }
 
-    checkTransit({ target: { checked } }) {
-        checked &&
-            this.setState(
-                () => ({
-                    travelMode: 'TRANSIT'
-                })
-            )
-    }
-
-    checkWalking({ target: { checked } }) {
-        checked &&
-            this.setState(
-                () => ({
-                    travelMode: 'WALKING'
-                })
-            )
-    }
 
     handleOriginChange(event) {
         this.setState({ origin: event.target.value });
@@ -179,137 +147,39 @@ class Directions extends Component {
             streetViewControl: false, // Disable street view control
             fullscreenControl: false,
         };
-        
+        const containerStyle = {
+            position: 'relative',
+            width: '100%',
+            height: '400px',
+        };
+
+        const mapStyle = {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100vh',
+        };
+
+        const overlayStyle = {
+            position: 'relative',
+            
+            height:'80%',
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            padding: '10px',
+            borderRadius: '4px',
+        };
         return (
-            <div className='map'>
-                <h3 className='w-100 h-10 text-center items-center bg-red-500 rounded-t-lg text-white block bold border-2 border-amber-400 ...'>Parul Navigation</h3>
+            <div className='map z-15 ' style={containerStyle}>
 
                 <div className='map-container rounded-sm border-x-2'>
-                    <div className='max-w-fit flex items-center'>
-                        <div className='justify-center align-center items-center content-center'>
-                            <div className="map-settings p-4 bg-blue-500 rounded-b-sm text-white border-y-2 border-x-2 border-amber-200 ">
-                                <div className="mb-4">
-
-                                </div>
-                                <div className=' rounded border ... mb-4'>
-                                    <div className=''>
-                                        <div className='text-gray-500 w-100'>
-                                            <div className=" flex p-2 ">
-                                                <input
-                                                    id="ORIGIN"
-                                                    className="form-input mt-1 block w-full rounded-sm"
-                                                    type="text"
-                                                    value={this.state.origin}
-                                                    onChange={this.handleOriginChange}
-                                                    placeholder='Origin...'
-                                                />
-                                                <div className="rounded text-white pl-1">
-                                                    <div onClick={this.handleCurrentLocation}>
-                                                        <button>
-                                                            <i className="fas fa-compass"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="mb-4 flex p-2">
-                                                <input
-                                                    id="DESTINATION"
-                                                    className="form-input mt-1 block w-full rounded-sm"
-                                                    type="text"
-                                                    value={this.state.destination}
-                                                    onChange={this.handleDestinationChange}
-                                                    placeholder='Destination...'
-                                                />&nbsp;
-                                                <div className="rounded text-white">
-                                                    <div onClick={this.handleCurrentLocation}>
-                                                        <button>
-                                                            <i class="fas fa-exchange-alt fa-rotate-90"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-4 rounded mb-4 border ...">
-                                    <div className="mr-4">
-                                        <input
-                                            id="DRIVING"
-                                            className="form-radio"
-                                            name="travelMode"
-                                            type="radio"
-                                            checked={this.state.travelMode === 'DRIVING'}
-                                            onChange={this.checkDriving}
-                                        />
-                                        <label className="ml-2 text-white" htmlFor="DRIVING">
-                                            <i class="text-white fa-solid fa-car"></i> Driving
-                                        </label>
-                                    </div>
-
-                                    <div className="mr-4">
-                                        <input
-                                            id="BICYCLING"
-                                            className="form-radio"
-                                            name="travelMode"
-                                            type="radio"
-                                            checked={this.state.travelMode === 'BICYCLING'}
-                                            onChange={this.checkBicycling}
-                                        />
-                                        <label className="ml-2 text-white" htmlFor="BICYCLING">
-                                            <i class="fa-solid fa-bicycle"></i> Bicycling
-                                        </label>
-                                    </div>
-
-                                    <div className="mr-4">
-                                        <input
-                                            id="TRANSIT"
-                                            className="form-radio"
-                                            name="travelMode"
-                                            type="radio"
-                                            checked={this.state.travelMode === 'TRANSIT'}
-                                            onChange={this.checkTransit}
-                                        />
-                                        <label className="ml-2 text-white" htmlFor="TRANSIT">
-                                            <i class="fa-solid fa-bus"></i> Transit
-                                        </label>
-                                    </div>
-
-                                    <div className="mr-4">
-                                        <input
-                                            id="WALKING"
-                                            className="form-radio"
-                                            name="travelMode"
-                                            type="radio"
-                                            checked={this.state.travelMode === 'WALKING'}
-                                            onChange={this.checkWalking}
-                                        />
-                                        <label className="ml-2 text-white" htmlFor="WALKING">
-                                            <i class="fa-solid fa-person-walking"></i> Walking
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className='grid grid-cols-2   rounded border ...'>
-                                    <p>Distance: <br />{this.state.distance}</p>
-                                    <p>Duration: <br />{this.state.duration}</p>
-                                </div>
-                                <button onClick={this.startJourney}>Start Journey</button>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <GoogleMap
                         onClick={this.onMapClick}
                         // required
                         id='direction-example'
                         // required
-                        mapContainerStyle={{
-                            height: '70vh',
-                            width: '100%'
-                        }}
+                        mapContainerStyle={mapStyle}
                         // required
                         zoom={15}
                         // required
@@ -328,7 +198,7 @@ class Directions extends Component {
                             console.log('DirectionsRenderer onUnmount map: ', map)
                         }}
                     ><BicyclingLayer />
-                        
+
                         {this.state.infoWindowPosition && (
                             <InfoWindow
                                 position={this.state.infoWindowPosition}
@@ -380,14 +250,97 @@ class Directions extends Component {
                                     }}
                                 />
                             ))}
-                        
+
                     </GoogleMap>
                     {this.state.journeyStarted && (
                         <div className="journey-info" id="journey-info">
                             <p>Your journey has started!</p>
                         </div>
                     )}
+                    <div className='absolute flex flex-cols justify-center h-screen items-center'>
+                    <div style={overlayStyle}>
+                    <div className='max-w-fit grid gril-rows-2 items-center'>
+                        <h3 className='w-100 h-10 text-center items-center bg-red-500 text-white block bold border-2 border-amber-400 ...'>Parul Navigation</h3>
+
+                        <div className='justify-center align-center items-center content-center'>
+                            <div className="map-settings p-4 bg-blue-500 rounded-b-sm text-white border-y-2 border-x-2 border-amber-200 grid grid-rows-3">
+                                <div className=' rounded border ... mb-4'>
+                                    <div className=''>
+                                        <div className='text-gray-500 w-100'>
+                                            <div className=" flex p-2 ">
+                                                <input
+                                                    id="ORIGIN"
+                                                    className="form-input mt-1 block w-full rounded-sm"
+                                                    type="text"
+                                                    value={this.state.origin}
+                                                    onChange={this.handleOriginChange}
+                                                    placeholder='Origin...'
+                                                />
+                                                <div className="rounded text-white pl-1">
+                                                    <div onClick={this.handleCurrentLocation}>
+                                                        <button>
+                                                            <i className="fas fa-compass"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-4 flex p-2">
+                                                <input
+                                                    id="DESTINATION"
+                                                    className="form-input mt-1 block w-full rounded-sm"
+                                                    type="text"
+                                                    value={this.state.destination}
+                                                    onChange={this.handleDestinationChange}
+                                                    placeholder='Destination...'
+                                                />&nbsp;
+                                                <div className="rounded text-white">
+                                                    <div onClick={this.handleCurrentLocation}>
+                                                        <button>
+                                                            <i class="fas fa-exchange-alt fa-rotate-90"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-4 rounded m-4 border text-white ...">
+                                    {/* MAKE it Active! */}
+                                    <button class={`form-radio ${this.state.travelMode === 'DRIVING' ? 'active' : ''}  hover:bg-blue-400  font-bold rounded-l`} onClick={() => this.handleTravelModeChange('DRIVING')}>
+                                        <i class="fa-solid fa-car"></i> Driving
+                                    </button>
+                                    <button class={`form-radio ${this.state.travelMode === 'BICYCLING' ? 'active' : ''}  hover:bg-blue-400  font-bold`} onClick={() => this.handleTravelModeChange('BICYCLING')}>
+                                        <i class="fa-solid fa-bicycle"></i> Bicycling
+                                    </button>
+                                    <button class={`form-radio ${this.state.travelMode === 'TRANSIT' ? 'active' : ''}  hover:bg-blue-400  font-bold`} onClick={() => this.handleTravelModeChange('TRANSIT')}>
+                                        <i class="fa-solid fa-bus"></i> Transit
+                                    </button>
+                                    <button class={`form-radio ${this.state.travelMode === 'WALKING' ? 'active' : ''}  hover:bg-blue-400  font-bold rounded-r`} onClick={() => this.handleTravelModeChange('WALKING')}>
+                                        <i class="fa-solid fa-person-walking"></i> Walking
+                                    </button>
+                                </div>
+                                <div className="map-settings p-4 bg-blue-500 rounded-b-sm text-white border-y-2 border-x-2 border-amber-200 ">
+                                    <div className='grid grid-cols-2   rounded border ...'>
+                                        <p>Distance: <br />{this.state.distance}</p>
+                                        <p>Duration: <br />{this.state.duration}</p>
+                                    </div>
+                                    <br />
+                                    <button onClick={this.startJourney} className='p-4 hover:bg-blue-400 font-bold rounded'>Start Journey</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    </div>
+                    </div>
                 </div>
+
             </div>
         )
     }
