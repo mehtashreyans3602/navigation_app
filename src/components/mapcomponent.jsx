@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { GoogleMap, LoadScript, DirectionsService, DirectionsRenderer, Marker, InfoWindow, BicyclingLayer } from '@react-google-maps/api';
+import {GoogleMap, LoadScript, DirectionsService, DirectionsRenderer, Marker, InfoWindow, BicyclingLayer } from '@react-google-maps/api';
 import './mapcomponent.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -172,130 +172,135 @@ class Directions extends Component {
 
     startJourney() {
         this.setState({ journeyStarted: true });
-      }
+    }
+
     render() {
         const mapoptions = {
             streetViewControl: false, // Disable street view control
             fullscreenControl: false,
         };
+        
         return (
             <div className='map'>
                 <h3 className='w-100 h-10 text-center items-center bg-red-500 rounded-t-lg text-white block bold border-2 border-amber-400 ...'>Parul Navigation</h3>
-                <div className="map-settings p-4 bg-blue-500 rounded-b-sm text-white border-y-2 border-x-2 border-amber-200 ">
-                    <div className="mb-4">
-
-                    </div>
-                    <div className=' rounded border ... mb-4'>
-                        <div className=''>
-                            <div className='text-gray-500 w-100'>
-                                <div className=" flex p-2 ">
-                                    <input
-                                        id="ORIGIN"
-                                        className="form-input mt-1 block w-full rounded-sm"
-                                        type="text"
-                                        value={this.state.origin}
-                                        onChange={this.handleOriginChange}
-                                        placeholder='Origin...'
-                                    />
-                                    <div className="rounded text-white pl-1">
-                                    <div onClick={this.handleCurrentLocation}>
-                                        <button>
-                                            <i className="fas fa-compass"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                </div>
-
-                                <div className="mb-4 flex p-2">
-                                    <input
-                                        id="DESTINATION"
-                                        className="form-input mt-1 block w-full rounded-sm"
-                                        type="text"
-                                        value={this.state.destination}
-                                        onChange={this.handleDestinationChange}
-                                        placeholder='Destination...'
-                                    />&nbsp;
-                                    <div className="rounded text-white">
-                                    <div onClick={this.handleCurrentLocation}>
-                                        <button>
-                                        <i class="fas fa-exchange-alt fa-rotate-90"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            <div>
-                                
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-wrap rounded mb-4 border ...">
-                        <div className="mr-4">
-                            <input
-                                id="DRIVING"
-                                className="form-radio"
-                                name="travelMode"
-                                type="radio"
-                                checked={this.state.travelMode === 'DRIVING'}
-                                onChange={this.checkDriving}
-                            />
-                            <label className="ml-2 text-white" htmlFor="DRIVING">
-                            <i class="text-white fa-solid fa-car"></i> Driving
-                            </label>
-                        </div>
-
-                        <div className="mr-4">
-                            <input
-                                id="BICYCLING"
-                                className="form-radio"
-                                name="travelMode"
-                                type="radio"
-                                checked={this.state.travelMode === 'BICYCLING'}
-                                onChange={this.checkBicycling}
-                            />
-                            <label className="ml-2 text-white" htmlFor="BICYCLING">
-                            <i class="fa-solid fa-bicycle"></i> Bicycling
-                            </label>
-                        </div>
-
-                        <div className="mr-4">
-                            <input
-                                id="TRANSIT"
-                                className="form-radio"
-                                name="travelMode"
-                                type="radio"
-                                checked={this.state.travelMode === 'TRANSIT'}
-                                onChange={this.checkTransit}
-                            />
-                            <label className="ml-2 text-white" htmlFor="TRANSIT">
-                            <i class="fa-solid fa-bus"></i> Transit
-                            </label>
-                        </div>
-
-                        <div className="mr-4">
-                            <input
-                                id="WALKING"
-                                className="form-radio"
-                                name="travelMode"
-                                type="radio"
-                                checked={this.state.travelMode === 'WALKING'}
-                                onChange={this.checkWalking}
-                            />
-                            <label className="ml-2 text-white" htmlFor="WALKING">
-                                <i class="fa-solid fa-person-walking"></i> Walking
-                            </label>
-                        </div>
-                    </div>
-                    <div className='grid grid-cols-2   rounded border ...'>
-                        <p>Distance: <br/>{this.state.distance}</p>
-                        <p>Duration: <br/>{this.state.duration}</p>
-                    </div>
-                    <button onClick={this.startJourney}>Start Journey</button>
-                </div>
-
 
                 <div className='map-container rounded-sm border-x-2'>
+                    <div className='max-w-fit flex items-center'>
+                        <div className='justify-center align-center items-center content-center'>
+                            <div className="map-settings p-4 bg-blue-500 rounded-b-sm text-white border-y-2 border-x-2 border-amber-200 ">
+                                <div className="mb-4">
+
+                                </div>
+                                <div className=' rounded border ... mb-4'>
+                                    <div className=''>
+                                        <div className='text-gray-500 w-100'>
+                                            <div className=" flex p-2 ">
+                                                <input
+                                                    id="ORIGIN"
+                                                    className="form-input mt-1 block w-full rounded-sm"
+                                                    type="text"
+                                                    value={this.state.origin}
+                                                    onChange={this.handleOriginChange}
+                                                    placeholder='Origin...'
+                                                />
+                                                <div className="rounded text-white pl-1">
+                                                    <div onClick={this.handleCurrentLocation}>
+                                                        <button>
+                                                            <i className="fas fa-compass"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-4 flex p-2">
+                                                <input
+                                                    id="DESTINATION"
+                                                    className="form-input mt-1 block w-full rounded-sm"
+                                                    type="text"
+                                                    value={this.state.destination}
+                                                    onChange={this.handleDestinationChange}
+                                                    placeholder='Destination...'
+                                                />&nbsp;
+                                                <div className="rounded text-white">
+                                                    <div onClick={this.handleCurrentLocation}>
+                                                        <button>
+                                                            <i class="fas fa-exchange-alt fa-rotate-90"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-4 rounded mb-4 border ...">
+                                    <div className="mr-4">
+                                        <input
+                                            id="DRIVING"
+                                            className="form-radio"
+                                            name="travelMode"
+                                            type="radio"
+                                            checked={this.state.travelMode === 'DRIVING'}
+                                            onChange={this.checkDriving}
+                                        />
+                                        <label className="ml-2 text-white" htmlFor="DRIVING">
+                                            <i class="text-white fa-solid fa-car"></i> Driving
+                                        </label>
+                                    </div>
+
+                                    <div className="mr-4">
+                                        <input
+                                            id="BICYCLING"
+                                            className="form-radio"
+                                            name="travelMode"
+                                            type="radio"
+                                            checked={this.state.travelMode === 'BICYCLING'}
+                                            onChange={this.checkBicycling}
+                                        />
+                                        <label className="ml-2 text-white" htmlFor="BICYCLING">
+                                            <i class="fa-solid fa-bicycle"></i> Bicycling
+                                        </label>
+                                    </div>
+
+                                    <div className="mr-4">
+                                        <input
+                                            id="TRANSIT"
+                                            className="form-radio"
+                                            name="travelMode"
+                                            type="radio"
+                                            checked={this.state.travelMode === 'TRANSIT'}
+                                            onChange={this.checkTransit}
+                                        />
+                                        <label className="ml-2 text-white" htmlFor="TRANSIT">
+                                            <i class="fa-solid fa-bus"></i> Transit
+                                        </label>
+                                    </div>
+
+                                    <div className="mr-4">
+                                        <input
+                                            id="WALKING"
+                                            className="form-radio"
+                                            name="travelMode"
+                                            type="radio"
+                                            checked={this.state.travelMode === 'WALKING'}
+                                            onChange={this.checkWalking}
+                                        />
+                                        <label className="ml-2 text-white" htmlFor="WALKING">
+                                            <i class="fa-solid fa-person-walking"></i> Walking
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className='grid grid-cols-2   rounded border ...'>
+                                    <p>Distance: <br />{this.state.distance}</p>
+                                    <p>Duration: <br />{this.state.duration}</p>
+                                </div>
+                                <button onClick={this.startJourney}>Start Journey</button>
+                            </div>
+                        </div>
+                    </div>
                     <GoogleMap
                         onClick={this.onMapClick}
                         // required
@@ -322,8 +327,8 @@ class Directions extends Component {
                         onUnmount={map => {
                             console.log('DirectionsRenderer onUnmount map: ', map)
                         }}
-                    >
-
+                    ><BicyclingLayer />
+                        
                         {this.state.infoWindowPosition && (
                             <InfoWindow
                                 position={this.state.infoWindowPosition}
@@ -375,14 +380,13 @@ class Directions extends Component {
                                     }}
                                 />
                             ))}
-                            <BicyclingLayer/>
+                        
                     </GoogleMap>
                     {this.state.journeyStarted && (
-  <div className="journey-info" id="journey-info">
-    <p>Your journey has started!</p>
-  </div>
-)}
-
+                        <div className="journey-info" id="journey-info">
+                            <p>Your journey has started!</p>
+                        </div>
+                    )}
                 </div>
             </div>
         )
