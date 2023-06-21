@@ -1,14 +1,16 @@
 import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Directions from './components/Directions';
+import MobileDirections from './components/Mobile';
 
-import Directions from './components/mapcomponent';
 function App() {
-  return (<>
-    
-    <div className="text-lg text-center items-center bg-white content-center justify-center">
-    <Directions/>
+  const screenWidth = window.innerWidth;
+
+  return (
+    <div className="App">
+      <div className="element md:hidden block "><MobileDirections/></div>
+      <div className="element hidden lg:block"><Directions></Directions></div>
     </div>
-  </>
   );
 }
 
