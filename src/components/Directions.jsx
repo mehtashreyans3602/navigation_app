@@ -346,20 +346,23 @@ class Directions extends Component {
                         </GoogleMap>
                     </LoadScript>
 
-                    <div className=' absolute flex flex-cols justify-center h-screen items-center'>
-                        <div style={overlayStyle}>
-                            <div className='max-w-fit grid gril-rows-3 items-center'>
-                                <h3 className='w-100 h-10 text-center items-center bg-red-500 text-white block bold border-2 border-amber-400 ...'>Parul Navigation</h3>
-                                <div className="map-options grid grid-cols-2">
-                                    <button onClick={toggleMapLabels}>Labels</button>
-                                    <button onClick={toggleSatelliteView}>Change Map Type</button>
+                    <div className='relative flex flex-cols justify-center rounded-b-sm  items-center'>
+                        <div className='' >
+                            <div className='max-w-fit grid items-center'>
+                                <div className=''>
+                                <div className='block bold border-2 bg-blue-500'>
+                                <div className="map-options p-1 m-1 grid grid-cols-2 rounded  border-white border-2 text-white">
+                                    <button className='hover:bg-blue-400  font-bold rounded-l' onClick={toggleMapLabels}>Labels</button>
+                                    <button className='hover:bg-blue-400  font-bold rounded-r' onClick={toggleSatelliteView}>Change Map Type</button>
+                                </div>
+                                </div>
                                 </div>
                                 <div className='justify-center align-center items-center content-center'>
-                                    <div className="map-settings p-4 bg-blue-500 rounded-b-sm text-white border-y-2 border-x-2 border-amber-200 grid grid-rows-3">
-                                        <div className=' rounded border ... mb-4'>
-                                            <div className=''>
+                                    <div className="map-settings p-1 bg-blue-500 rounded-b-sm text-white border-y-2 border-x-2 flex flex-col">
+                                        
+                                            <div className='rounded border ...'>
                                                 <div className='text-gray-500 w-100'>
-                                                    <div className=" flex p-2 ">
+                                                    <div className=" flex p-1">
                                                         <input
                                                             id="ORIGIN"
                                                             className="form-input mt-1 block w-full rounded-sm"
@@ -377,7 +380,7 @@ class Directions extends Component {
                                                         </div>
                                                     </div>
 
-                                                    <div className="mb-4 flex p-2">
+                                                    <div className="flex p-1">
                                                         <input
                                                             id="DESTINATION"
                                                             className="form-input mt-1 block w-full rounded-sm"
@@ -399,7 +402,7 @@ class Directions extends Component {
 
                                                 </div>
                                             </div>
-                                        </div>
+                                        
 
                                         <div className="grid grid-cols-4 rounded m-4 border text-white ...">
                                             {/* MAKE it Active! */}
