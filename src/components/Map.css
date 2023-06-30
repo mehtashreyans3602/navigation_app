@@ -1,0 +1,8 @@
+.panelbutton{
+    color: #FFDEA7;
+    background-color: #775654;
+}
+.panelbutton:hover{
+    background-color: white;
+    color: #775654;
+}
