@@ -240,14 +240,16 @@ const Map = (props) => {
                     </GoogleMap>
                 </LoadScript>
                 <div className='sticky w-100'>
-                <h3 className=" text-center items-center  block text-5xl  p-5 rounded-b-2xl ..." style={{backgroundColor:'#FFDEA7',color:'#775654'}}>
-                        STREETS OF PU
+                <div className='border-4 border-current rounded-b-2xl' style={{color:'#775654',borderColor:'#775654'}}>
+                <h3 className=" text-center font-bold items-center m-1 block text-5xl  p-5 rounded-b-2xl ..." style={{backgroundColor:'#FFDEA7',color:'#775654',borderColor:'#775654'}}>
+                        PU NAV
                     </h3>
+                </div>
                 </div>
                 <div className='sticky grid grid-rows-1 justify-center items-center mt-2'>
                 
-                    <div className='w-fit justify-between  rounded-2xl m-2 border-2 ring-4 ring-current'  style={{borderColor:'#775654'}}>
-                        <div className='sticky flex flex-row rounded border rounded-2xl ...' style={{backgroundColor:'#FFDEA7',color:'#775654'}}>
+                    <div className='w-fit justify-between  rounded-2xl m-2 border-4 '  style={{borderColor:'#775654'}}>
+                        <div className='sticky flex flex-row border rounded-2xl ...' style={{backgroundColor:'#FFDEA7',color:'#775654'}}>
                             <div className=' w-100'>
                                 <div className=" flex m-1 p-2">
                                     <input
