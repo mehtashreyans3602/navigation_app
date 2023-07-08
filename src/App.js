@@ -1,8 +1,8 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import Directions from "./components/Directions";
-import MobileDirections from "./components/Mobile";
+import SidePanelLeft from "./components/SidePanelLeft";
+import SidePanelRight from "./components/SidePanelRight";
+import MobileMap from "./components/MobileMap";
 import SidebarLeft from "./components/SidebarLeft";
-import Map from "./components/Map";
 import Main from "./components/Main";
 function App() {
   const screenWidth = window.innerWidth;
@@ -10,10 +10,15 @@ function App() {
   return (
     <div className="">
       <div className="element md:hidden block ">
-        <MobileDirections />
+       
+        <MobileMap/>  
+        <SidebarLeft/>
       </div>
       <div className="element hidden lg:block">
-        <Main/>
+        <Main>
+        <SidePanelLeft/>
+        <SidePanelRight/>
+        </Main>
       </div>
     </div>
   );
