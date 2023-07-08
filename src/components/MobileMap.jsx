@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, DirectionsService, DirectionsRenderer, Marker, InfoWindow, BicyclingLayer, KmlLayer, TrafficLayer, TransitLayer, Circle } from '@react-google-maps/api';
 import './Map.css'
-const Map = (props) => {
+const MobileMap = (props) => {
     const [response, setResponse] = useState(null);
     const [travelMode, setTravelMode] = useState('');
     const [origin, setOrigin] = useState('');
@@ -32,7 +32,7 @@ const Map = (props) => {
         top: 0,
         left: 0,
         width: '100%',
-        height: '87vh',
+        height: '100vh',
     };
 
     const overlayStyle = {
@@ -243,7 +243,7 @@ const Map = (props) => {
                 <div className='sticky  justify-center items-center mt-2'>
 
                     <div className='w-full rounded-2xl items-center justify-center bg-black'>
-                        <div className='sticky flex flex-row justify-around rounded-2xl  ...' style={{ backgroundColor: '#3E3E3EA3', color: '#E7BDB9' }} >
+                        <div className='sticky flex flex-col justify-around rounded-2xl  ...' style={{ backgroundColor: '#3E3E3EA3', color: '#E7BDB9' }} >
                             <div className='flex'>
                                 <div className="flex p-2 items-center">
                                     <input
@@ -316,7 +316,7 @@ const Map = (props) => {
                             </div>
 
 
-                            <div className="border-l flex p-2 justify-items-start"  >
+                            <div className="border-l grid grid-cols-3"  >
                                 {/* MAKE it Active! */}
                                 <button class={`form-radio ${travelMode === 'BICYCLING' ? 'active' : ''} m-1 p-1 panelbutton  hover:bg-white  font-bold rounded-2xl`} onClick={() => setTravelMode('BICYCLING')}>
                                     <i class="fa-solid fa-bicycle"></i> Bicycling
@@ -324,13 +324,14 @@ const Map = (props) => {
                                 <button class={`form-radio ${travelMode === 'WALKING' ? 'active' : ''} m-1 p-1 panelbutton  hover:bg-white  font-bold rounded-2xl`} onClick={() => setTravelMode('WALKING')} >
                                     <i class="fa-solid fa-person-walking"></i> Walking
                                 </button>
-                            </div>
-                            <div className="border-l p-2  items-center"  >
+                                <div className=" "  >
                                 <button onClick={handleStartJourney} className='mt-1 p-4 hover:bg-white font-bold rounded'>Start Journey</button>
                             </div>
+                            </div>
+                            
                             <div className="border-l p-2"  >
                                 <div className=" items-center">
-                                    <div className='flex flex-col align-middle text-center   rounded ...'>
+                                    <div className='grid grid-cols-2 align-middle text-center   rounded ...'>
                                         <p>Distance: {distance}</p>
                                         <p>Duration: {duration}</p>
                                     </div>
@@ -344,5 +345,5 @@ const Map = (props) => {
     );
 };
 
-export default Map;
+export default MobileMap;
 

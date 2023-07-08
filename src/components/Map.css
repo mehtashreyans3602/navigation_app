@@ -1,8 +1,10 @@
-.panelbutton{
-    color: #FFDEA7;
-    background-color: #775654;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+  
+/* width */
+::-webkit-scrollbar {
+   display: none;
 }
-.panelbutton:hover{
-    background-color: white;
-    color: #775654;
-}
+  

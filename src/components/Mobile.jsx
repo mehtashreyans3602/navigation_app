@@ -213,7 +213,7 @@ class MobileDirections extends Component {
 
         const mapStyle = {
             width: '100%',
-            height: '50vh',
+            height: '65vh',
         };
 
         const overlayStyle = {
@@ -257,11 +257,11 @@ class MobileDirections extends Component {
                 <div className='flex flex-cols rounded-sm border-x-2'>
                     <div className='justify-center items-center'>
                         <div className=''>
-                            <div className='grid items-center border-2'style={{backgroundColor:'#FFDEA7',color:'#775654',borderColor:'#775654'}}>
-                                <h3 className='w-100 h-10 text-center items-center block p-2 ...'>PU NAV</h3>
+                            <div className='grid items-center border-2 bg-black'>
+                                <h3 className='w-100 h-10 text-center items-center block p-2 ...' style={{ backgroundColor: '#3E3E3EA3', color: '#E7BDB9' }}>PU NAV</h3>
 
                                 <div className='justify-center align-center items-center content-center'>
-                                    <div style={{backgroundColor:'#775654',color:'#FFDEA7'}} className="map-settings rounded-b-sm  border-y-2 border-x-2 border-amber-200">
+                                    <div style={{ backgroundColor: '#3E3E3EA3', color: '#E7BDB9' }} className="map-settings rounded-b-sm  ">
                                         <div className=' rounded border ... m-1'>
                                             <div className=''>
                                                 <div className='text-gray-500 w-100'>
@@ -309,31 +309,42 @@ class MobileDirections extends Component {
 
                                         </div>
 
-                                        <div className="grid grid-cols-4 rounded border m-1 text-white ...">
+                                        <div className="grid grid-cols-3 rounded border m-1 ...">
                                             {/* MAKE it Active! */}
-                                            <button class={`form-radio ${this.state.travelMode === 'DRIVING' ? 'active' : ''}  hover:bg-blue-400  font-bold rounded-l`} onClick={() => this.handleTravelModeChange('DRIVING')}>
-                                                <i class="fa-solid fa-car"></i><br />Driving
-                                            </button>
-                                            <button class={`form-radio ${this.state.travelMode === 'BICYCLING' ? 'active' : ''}  hover:bg-blue-400  font-bold`} onClick={() => this.handleTravelModeChange('BICYCLING')}>
+                                            <button class={`form-radio ${this.state.travelMode === 'BICYCLING' ? 'active' : ''}  hover:bg-white  font-bold`} onClick={() => this.handleTravelModeChange('BICYCLING')}>
                                                 <i class="fa-solid fa-bicycle"></i><br />Bicycling
                                             </button>
-                                            <button class={`form-radio ${this.state.travelMode === 'TRANSIT' ? 'active' : ''}  hover:bg-blue-400  font-bold`} onClick={() => this.handleTravelModeChange('TRANSIT')}>
-                                                <i class="fa-solid fa-bus"></i><br />Transit
-                                            </button>
-                                            <button class={`form-radio ${this.state.travelMode === 'WALKING' ? 'active' : ''}  hover:bg-blue-400  font-bold rounded-r`} onClick={() => this.handleTravelModeChange('WALKING')}>
+                                            <button class={`form-radio ${this.state.travelMode === 'WALKING' ? 'active' : ''}  hover:bg-white  font-bold `} onClick={() => this.handleTravelModeChange('WALKING')}>
                                                 <i class="fa-solid fa-person-walking"></i><br />Walking
                                             </button>
+                                            <button onClick={this.startJourney} className='p-1 hover:bg-white font-bold rounded-r'>Start Journey</button>
+                            
                                         </div>
 
                                         <div className="map-options grid grid-cols-2 rounded border m-1">
-                                            <button className='p-1 hover:bg-blue-400 font-bold rounded-l' onClick={toggleMapLabels}>Labels</button>
-                                            <button className='p-1 hover:bg-blue-400 font-bold rounded-r' onClick={toggleSatelliteView}>Map Type</button>
+                                            <button className='p-1 hover:bg-white font-bold rounded-l' onClick={toggleMapLabels}>Labels</button>
+                                            <button className='p-1 hover:bg-white font-bold rounded-r' onClick={toggleSatelliteView}>Map Type</button>
                                         </div>
 
 
                                     </div>
                                 </div>
-
+                                <div style={{ color: '#E7BDB9' }}  className=' flex bg-black'>
+                        <div style={{ backgroundColor: '#3E3E3EA3', color: '#E7BDB9' }}  className="map-settings p-1 rounded-b-sm text-whiteflex flex-col ">
+                            <div className='grid grid-cols-3 justify-between p-1  rounded border ...'>
+                                <p>Distance: <br />{this.state.distance}</p>
+                                <p>Duration: <br />{this.state.duration}</p>
+                                <p>Remaining Time:<br />
+                                    {this.state.remainingTime}</p>
+                            </div>
+                            <br />
+                            {this.state.journeyStarted && (
+                                <div className="journey-info" id="journey-info">
+                                    <p>Your journey has started!</p>
+                                </div>
+                            )}
+                        </div>
+                        </div>
                             </div>
                         </div>
 
@@ -424,23 +435,7 @@ class MobileDirections extends Component {
                                 )}
                             </GoogleMap>
                         </LoadScript>
-                        <div style={{color:'#775654'}} className='border-2 border-current flex'>
-                        <div style={{backgroundColor:'#775654'}} className="map-settings p-1 rounded-b-sm text-white border-y-2 border-x-2 border-amber-200 flex flex-col ">
-                            <div className='grid grid-cols-3 justify-between p-1  rounded border ...'>
-                                <p>Distance: <br />{this.state.distance}</p>
-                                <p>Duration: <br />{this.state.duration}</p>
-                                <p>Remaining Time:<br />
-                                    {this.state.remainingTime}</p>
-                            </div>
-                            <br />
-                            <button onClick={this.startJourney} className='p-1 hover:bg-blue-400 font-bold rounded'>Start Journey</button>
-                            {this.state.journeyStarted && (
-                                <div className="journey-info" id="journey-info">
-                                    <p>Your journey has started!</p>
-                                </div>
-                            )}
-                        </div>
-                        </div>
+                        
 
                     </div>
                 </div>
