@@ -1,6 +1,6 @@
 import Img from '../assets/SC.png'
 import Marquee from 'react-fast-marquee';
-const places = ["PU Circle", "PIET", "PIT","PIAR", "PPI", "PIMSR", "PIAS", "PIP", "JNHM","PIN"];
+const places = ["PU Circle", "PIET", "PIT", "PIAR", "PPI", "PIMSR", "PIAS", "PIP", "JNHM", "PIN"];
 
 export default () => {
 
@@ -15,8 +15,6 @@ export default () => {
                             <h5 className="">{place}</h5>
                         </Marquee>
                     </div>
-
-
                 </a>
 
             ))}
