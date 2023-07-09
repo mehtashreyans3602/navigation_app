@@ -1,11 +1,10 @@
-"use client"
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, DirectionsService, DirectionsRenderer, Marker, InfoWindow, BicyclingLayer, KmlLayer, TrafficLayer, TransitLayer, Circle } from '@react-google-maps/api';
-import './Map.css'
-const MobileMap = (props) => {
+import './Map.css';
+
+const MobileMap = () => {
     const [response, setResponse] = useState(null);
-    const [travelMode, setTravelMode] = useState('');
-    const [origin, setOrigin] = useState('');
+    const [travelMode, setTravelMode] = useState('WALKING');
     const [destination, setDestination] = useState('');
     const [showInfoWindow, setShowInfoWindow] = useState(false);
     const [remainingTime, setRemainingTime] = useState(null);
@@ -14,6 +13,7 @@ const MobileMap = (props) => {
         streetViewControl: false,
         fullscreenControl: false,
         mapTypeControl: false,
+        zoomControl: false,
     });
     const [clickedLocation, setClickedLocation] = useState(null);
     const [infoWindowPosition, setInfoWindowPosition] = useState(null);
@@ -33,6 +33,7 @@ const MobileMap = (props) => {
         left: 0,
         width: '100%',
         height: '100vh',
+        tilt: 45,
     };
 
     const overlayStyle = {
@@ -42,8 +43,8 @@ const MobileMap = (props) => {
         padding: '10px',
         borderRadius: '4px',
     };
+
     useEffect(() => {
-        // Show the current location marker when the component mounts
         showCurrentLocationMarker();
     }, []);
 
@@ -53,6 +54,8 @@ const MobileMap = (props) => {
                 const { latitude, longitude } = position.coords;
                 const currentLocation = { lat: latitude, lng: longitude };
                 setCurrentLocation(currentLocation);
+                setClickedLocation(currentLocation);
+                setDestination('');
             });
         }
     };
@@ -63,26 +66,14 @@ const MobileMap = (props) => {
         if (response !== null) {
             if (response.status === 'OK') {
                 const duration = response.routes[0].legs[0].duration.text;
-                const remainingTime = duration;
                 setResponse(response);
-                setRemainingTime(remainingTime);
+                setRemainingTime(response.routes[0].legs[0].duration.text);
                 setDuration(response.routes[0].legs[0].duration.text);
                 setDistance(response.routes[0].legs[0].distance.text);
             } else {
                 console.log('response: ', response);
             }
         }
-    };
-
-
-
-    const handleSwapLocations = () => {
-        setOrigin(destination);
-        setDestination(origin);
-    };
-
-    const handleOriginChange = (event) => {
-        setOrigin(event.target.value);
     };
 
     const handleDestinationChange = (event) => {
@@ -96,42 +87,40 @@ const MobileMap = (props) => {
 
     const handleCurrentLocation = () => {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const { latitude, longitude } = position.coords;
-                const clickedLocation = { lat: latitude, lng: longitude };
-                const geocoder = new window.google.maps.Geocoder();
-                geocoder.geocode({ location: clickedLocation }, (results, status) => {
-                    if (status === 'OK') {
-                        const locationName = results[0]?.formatted_address || '';
-                        showCurrentLocationMarker();
-                        setClickedLocation(clickedLocation);
-                        setOrigin(locationName);
-
-                        const circleOptions = {
-                            center: clickedLocation,
-                            radius: 1000,
-                            fillColor: '#00FF00',
-                            strokeColor: '#00FF00',
-                            strokeOpacity: 0.8,
-                            strokeWeight: 2,
-                        };
-
-                        const circle = new window.google.maps.Circle(circleOptions);
-                        circle.setMap(null); // Remove the previous circle
-
-                        circle.setMap(GoogleMap.current);
-                    } else {
-                        console.error('Geocode request failed. Status:', status);
-                    }
-                });
-            }, (error) => {
-                console.error('Error getting current position:', error);
-            });
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const clickedLocation = { lat: latitude, lng: longitude };
+                    const geocoder = new window.google.maps.Geocoder();
+                    geocoder.geocode({ location: clickedLocation }, (results, status) => {
+                        if (status === 'OK') {
+                            const locationName = results[0]?.formatted_address || '';
+                            showCurrentLocationMarker();
+                            setClickedLocation(clickedLocation);
+                            const circleOptions = {
+                                center: clickedLocation,
+                                radius: 1000,
+                                fillColor: '#00FF00',
+                                strokeColor: '#00FF00',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 2,
+                            };
+                            const circle = new window.google.maps.Circle(circleOptions);
+                            circle.setMap(null); // Remove the previous circle
+                            circle.setMap(GoogleMap.current);
+                        } else {
+                            console.error('Geocode request failed. Status:', status);
+                        }
+                    });
+                },
+                (error) => {
+                    console.error('Error getting current position:', error);
+                }
+            );
         } else {
             console.error('Geolocation is not supported by this browser.');
         }
     };
-
 
     const handleInfoWindowClose = () => {
         setShowInfoWindow(false);
@@ -156,15 +145,23 @@ const MobileMap = (props) => {
         setInfoWindowPosition(null);
     };
 
-
-
-    const AddLocationToOrigin = ({ clickedLocation }) => {
-        setOrigin(clickedLocation)
+    const handleReset = () => {
+        setDestination('');
+        setResponse(null);
+        setShowInfoWindow(false);
+        setRemainingTime(null);
+        setShowLabels(true);
+        setClickedLocation(null);
+        setInfoWindowPosition(null);
+        setJourneyStarted(false);
+        setDistance(null);
+        setDuration(null);
     };
 
     const AddLocationToDestination = ({ clickedLocation }) => {
-        setDestination(clickedLocation)
+        setDestination(clickedLocation);
     };
+
     return (
         <div className='map' style={containerStyle}>
             <div className='' style={overlayStyle}>
@@ -177,7 +174,14 @@ const MobileMap = (props) => {
                         onClick={onMapClick}
                     >
                         {currentLocation && (
-                            <Marker position={currentLocation} icon="https://maps.google.com/mapfiles/ms/icons/blue-dot.png" />
+                            <Circle position={currentLocation} options={{
+                                radius: 1000,
+                                fillColor: '#00FF00',
+                                strokeColor: '#00FF00',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 2,
+                                zIndex: 9999,
+                            }} />
                         )}
 
                         {clickedLocation && (
@@ -197,35 +201,30 @@ const MobileMap = (props) => {
                             <DirectionsRenderer
                                 directions={response}
                                 options={{
-                                    suppressMarkers: true,
-                                    polylineOptions: {
-                                        strokeColor: journeyStarted ? '#FF0000' : '#0000FF',
-                                    },
+                                    suppressMarkers: false,
+
                                 }}
                             />
                         )}
-                        <TrafficLayer autoUpdate>
+                        <TrafficLayer autoUpdate >
 
                         </TrafficLayer>
-                        <DirectionsService
+                        <DirectionsService autoUpdate
                             options={{
                                 destination,
-                                origin,
+                                origin: currentLocation, // Set current location as the origin
                                 travelMode,
+                                provideRouteAlternatives: true,
                             }}
                             callback={directionsCallback}
                         />
                         <BicyclingLayer />
                         <KmlLayer url="https://www.example.com/your.kml" />
-
                         <TransitLayer />
+
                         {infoWindowPosition && (
                             <InfoWindow position={infoWindowPosition} onCloseClick={onInfoWindowClose}>
                                 <div>
-                                    <button onClick={() => AddLocationToOrigin({ clickedLocation: infoWindowPosition })}>
-                                        Add to Origin
-                                    </button>
-                                    <br />
                                     <button onClick={() => AddLocationToDestination({ clickedLocation: infoWindowPosition })}>
                                         Add to Destination
                                     </button>
@@ -238,105 +237,52 @@ const MobileMap = (props) => {
                                 <span className="timer">{remainingTime}</span>
                             </div>
                         )}
+                        <div onClick={handleCurrentLocation} className='fixed right-2 bottom-20  text-black hover:scale-100'>
+                            <button>
+                                <i className="fas fa-compass"></i>
+                            </button>
+                        </div>
+
                     </GoogleMap>
                 </LoadScript>
-                <div className='sticky  justify-center items-center mt-2'>
+                <div className='sticky top-0 justify-center items-center '>
+                    <div className='w-full  items-center justify-center '>
+                        <div className='sticky flex flex-col justify-around  ... ' style={{ backgroundColor: '#3E3E3EA3', color: '#E7BDB9' }}>
+                            <div className='w-full text-center'>
+                                <div className="flex p-2 items-center ">
 
-                    <div className='w-full rounded-2xl items-center justify-center bg-black'>
-                        <div className='sticky flex flex-col justify-around rounded-2xl  ...' style={{ backgroundColor: '#3E3E3EA3', color: '#E7BDB9' }} >
-                            <div className='flex'>
-                                <div className="flex p-2 items-center">
-                                    <input
-                                        id="ORIGIN"
-                                        className="form-input mt-1  w-full rounded-lg"
-                                        type="text"
-                                        value={origin}
-                                        onChange={handleOriginChange}
-                                        placeholder=' Origin...'
-
-                                    />
-                                    <div className="rounded  pl-1">
-                                        <div onClick={handleCurrentLocation}>
-                                            <button>
-                                                <i className="fas fa-compass"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex p-2 items-center">
                                     <input
                                         id="DESTINATION"
-                                        className="form-input mt-1  w-full rounded-lg"
+                                        className="form-input w-full rounded-sm bg-transparent text-white"
                                         type="text"
                                         value={destination}
                                         onChange={handleDestinationChange}
                                         placeholder=' Destination...'
+                                    />
 
-                                    />&nbsp;
-                                    <div className="rounded ">
-                                        <div >
-                                            <button onClick={handleSwapLocations}>
-                                                <i class="fas fa-exchange-alt fa-rotate-90"></i>
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
 
-                            <div>
-
-                            </div>
-                            <div className="border-l p-2 flex place-items-center justify-between" >
-
-
-                                <div className="">
-                                    <label>Map Type:&nbsp;</label>
-                                    <select className='' onChange={(e) => handleMapOptionsChange('mapTypeId', e.target.value)}>
-                                        <option value="roadmap">Roadmap</option>
-                                        <option value="satellite">Satellite</option>
-                                        <option value="terrain">Terrain</option>
-                                        <option value="hybrid">Hybrid</option>
-                                    </select>
-                                </div>
-                                <div className="p-2 w-100 flex items-center align-middle">
-                                <label>Zoom:&nbsp;</label>
-                                    <div className="">
-                                        <input
-                                            type="range"
-                                            min={0}
-                                            max={20}
-                                            step={1}
-                                            value={mapOptions.zoom}
-                                            onChange={(e) => handleMapOptionsChange('zoom', parseInt(e.target.value))}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div className="border-l grid grid-cols-3"  >
-                                {/* MAKE it Active! */}
-                                <button class={`form-radio ${travelMode === 'BICYCLING' ? 'active' : ''} m-1 p-1 panelbutton  hover:bg-white  font-bold rounded-2xl`} onClick={() => setTravelMode('BICYCLING')}>
-                                    <i class="fa-solid fa-bicycle"></i> Bicycling
+                            {handleDestinationChange && (
+                                <div className=" grid grid-cols-2 p-2">
+                                <button className=" bg-neutral-500 rounded-full font-bold p-2 m-1 " onClick={handleReset}>
+                                    Reset
                                 </button>
-                                <button class={`form-radio ${travelMode === 'WALKING' ? 'active' : ''} m-1 p-1 panelbutton  hover:bg-white  font-bold rounded-2xl`} onClick={() => setTravelMode('WALKING')} >
-                                    <i class="fa-solid fa-person-walking"></i> Walking
+                                <button onClick={handleStartJourney} className=' bg-neutral-500 rounded-full font-bold p-2 m-1'>
+                                    Start Journey
                                 </button>
-                                <div className=" "  >
-                                <button onClick={handleStartJourney} className='mt-1 p-4 hover:bg-white font-bold rounded'>Start Journey</button>
                             </div>
-                            </div>
-                            
-                            <div className="border-l p-2"  >
-                                <div className=" items-center">
-                                    <div className='grid grid-cols-2 align-middle text-center   rounded ...'>
+                            )}
+
+                            {journeyStarted && (<div className="p-2">
+                                <div className="items-center">
+                                    <div className='grid grid-cols-2 align-middle text-center rounded ...'>
                                         <p>Distance: {distance}</p>
                                         <p>Duration: {duration}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div>)}
                         </div>
                     </div>
                 </div>
@@ -346,4 +292,3 @@ const MobileMap = (props) => {
 };
 
 export default MobileMap;
-
